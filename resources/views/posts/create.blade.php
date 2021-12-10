@@ -1,11 +1,10 @@
 @include("layouts.header")
 <div class="main-wrapper">
-
     <section class="blog-list px-3 py-8 p-md-5">
     <div class="container single-col-max-width">
         <h5 style="margin-bottom: 5%">Create New Post</h5>
 
-        <form enctype="multipart/form-data" id="create_post"  class="login-form" >
+        <form action="{{route('create')}}" method="POST" enctype="multipart/form-data" id="create_post"  class="login-form" >
             @csrf
             <div class="form-group">
                 <label for="title">Title</label>
@@ -22,110 +21,54 @@
                 <input type="number" class="form-control" id="time" name="time">
             </div>
 
-            <div class="file-field" style="margin-top: 5%">
-                <div class="btn btn-secondary btn-sm float-left">
-                    <span>Choose file</span>
-                    <input type="file" id="photo_url" name="photo_url">
-                </div>
-            </div>
-
             <div class="form-group" style="margin-top: 5%">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
+
     </div>
 </section>
 </div>
 
 <script src="{{url("assets/vendor/jquery/jquery.min.js")}}"></script>
-<script>
-    $(document).ready(function () {
+<script src="{{url("assets/vendor/jquery_validator/jquery.validate.js")}}"></script>
 
-        // $("form").submit( function (e) {
-        //     e.preventDefault();
-        //
-        //     var token = localStorage.getItem('token');
-        //     var title = $('#title').val()
-        //     var post_content = $('#content').val()
-        //     var time = $('#time').val()
-        //     var photo_url = $('#photo_url').val()
-        //
-        //     var data = {title, post_content, time, photo_url}
-        //
-        //     create_post(data);
-        //     return false;
-        // });
+<script>
+    $(function () {
+        var $registrationForm = $("form")
+        $.validator.addMethod("noSpace", function(value, element) {
+            return value == '' || value.trim().length != 0
+        }, "Spaces are not allowed");
+
+        if($registrationForm.length){
+            $registrationForm.validate({
+                rules:{
+                    title: {required: true, noSpace: true},
+                    post_content: {required: true, minlength : 10},
+                    time: {required: true, minlength : 4},
+                },
+                messages:{
+                    title: {required: 'Title is required!'},
+                    post_content: {required: 'Content is required!'},
+                    time: {required: 'Time is required!'},
+                }
+            })
+        }
 
         $('form').on('submit', function (e) {
-            var token = localStorage.getItem('token');
             e.preventDefault();
-            data = $('form').serialize();
-            console.log(data)
+            var token = localStorage.getItem('token');
 
             $.ajax({
-                type: 'post',
+                type: 'POST',
                 url: "{{route('create')}}",
-                data: data,
-                headers: {
-                    Authorization: "Bearer " + token,
-                    Accept: "application/json",
-                    'Content-Type': 'application/json',
-                },
+                headers:{Authorization: "Bearer " + token},
+                data: $('form').serializeArray(),
                 success: function () {
-                    alert('form was submitted');
+                    alert('New Post has been created');
                 }
             });
         });
-
-        // var token = localStorage.getItem('token');
-        {{--$("#create_post").ajaxForm({--}}
-        {{--    url: "{{route("create")}}",--}}
-        {{--    type: 'post',--}}
-        {{--    headers: {--}}
-        {{--        Authorization: "Bearer " + token,--}}
-        {{--        Accept: "application/json",--}}
-        {{--        'Content-Type': 'application/json',--}}
-        {{--    },--}}
-        {{--    success: function (response){--}}
-        {{--        console.log(response)--}}
-        //     }
-
-      // function create_post(data) {
-      //
-      // }
-      //
-      //       $.ajax({
-      //           type: 'post',
-      //           url: 'post.php',
-      //           data: $('form').serialize(),
-      //           success: function () {
-      //               alert('form was submitted');
-      //           }
-      //       });
-      //
-      //   });
-    })
-
-{{--function create_post(email, password) {--}}
-{{--$.ajax({--}}
-{{--    method: 'POST',--}}
-{{--    url: "{{route('login')}}",--}}
-{{--    data: {'email': email, 'password': password},--}}
-{{--    success: function(response){--}}
-{{--        localStorage.setItem('token', response.access_token);--}}
-{{--        if(response.status == 1) {--}}
-{{--            window.location.href = "{{route("posts_list")}}"--}}
-{{--        }else {--}}
-{{--            alert('Email and/or Password Incorrect');--}}
-{{--        }--}}
-{{--        // main_page();--}}
-{{--    },--}}
-{{--    error: function(jqXHR, textStatus, errorThrown) {--}}
-{{--        alert('Email and/or Password Incorrect');--}}
-{{--        console.log("AJAX error: " + textStatus + ' : ' + errorThrown);--}}
-{{--    }--}}
-{{--});--}}
-{{--}--}}
-// })
+    });
 </script>
 @include("layouts.footer")

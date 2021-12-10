@@ -27,9 +27,6 @@
                 <div class="container single-col-max-width">
                     <div class="item mb-5">
                         <div class="row g-3 g-xl-0">
-                            <div class="col-2 col-xl-3">
-                                <img class="img-fluid post-thumb " src="{{url("assets/images/post.jpg")}}" alt="image">
-                            </div>
                             <div class="col">
                                 <h3 class="title mb-1"><a class="text-link" href="blog-post.html">Top 3 JavaScript Frameworks</a></h3>
                                 <div class="meta mb-1"><span class="date">Published 2 days ago</span><span class="time">5 min read</span><span class="comment"><a class="text-link" href="#">8 comments</a></span></div>

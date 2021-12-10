@@ -18,7 +18,7 @@
                     <div class="signin-content">
                         <div class="signin-image">
                             <figure><img src="{{url("assets/images/signin-image.jpg")}}" alt="sing up image"></figure>
-                            <a href="{{route('register')}}" class="signup-image-link">Create an account</a>
+                            <a href="{{route('sign_up')}}" class="signup-image-link">Create an account</a>
                         </div>
 
                         <div class="signin-form">
@@ -28,7 +28,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="email"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input type="text" name="nameemail" id="email" placeholder="Your Email"/>
+                                    <input type="email" name="email" id="email" placeholder="Your Email"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
@@ -47,17 +47,36 @@
 
     <!-- JS -->
     <script src="{{url("assets/vendor/jquery/jquery.min.js")}}"></script>
+    <script src="{{url("assets/vendor/jquery_validator/jquery.validate.js")}}"></script>
     <script src="{{url("assets/js/main.js")}}"></script>
-        <script>
-            $(document).ready(function () {
 
-                $("form").submit( function (e) {
+    <script>
+            $(document).ready(function () {
+                var $registrationForm = $("form")
+                $.validator.addMethod("noSpace", function(value, element) {
+                    return value == '' || value.trim().length != 0
+                }, "Spaces are not allowed");
+
+                if($registrationForm.length){
+                    $registrationForm.validate({
+                        rules:{
+                            email: {required: true, noSpace: true},
+                            password: {required: true, minlength : 4, noSpace: true},
+                        },
+                        messages:{
+                            email: {required: 'Email is required!'},
+                            password: {required: 'Password is required!'},
+                        }
+                    })
+                }
+                $("form").submit(function (e) {
                     var email = $('#email').val()
                     var password = $('#your_pass').val()
                     e.preventDefault();
                     login(email, password);
                     return false;
                 });
+
             })
 
 
@@ -80,30 +99,6 @@
                     }
                 });
             }
-
-            {{--function main_page() {--}}
-            {{--    $('#preferred-shops').remove();--}}
-            {{--    $('#nearby-shops').remove();--}}
-            {{--    var token = localStorage.getItem('token');--}}
-
-            {{--    $.ajax({--}}
-            {{--        method: 'GET',--}}
-            {{--        url: "{{route('index')}}",--}}
-            {{--        headers: {--}}
-            {{--            Authorization: "Bearer " + token,--}}
-            {{--            Accept: "application/json",--}}
-            {{--            'Content-Type': 'application/json',--}}
-            {{--        },--}}
-            {{--        success: function(response){--}}
-            {{--            if(response.)--}}
-            {{--            window.location.href = "{{route('index')}}";--}}
-            {{--        },--}}
-            {{--        error: function(jqXHR, textStatus, errorThrown) {--}}
-            {{--            console.log("AJAX error: " + textStatus + ' : ' + errorThrown);--}}
-            {{--        }--}}
-            {{--    })--}}
-            {{--}--}}
-
         </script>
 </body>
 </html>

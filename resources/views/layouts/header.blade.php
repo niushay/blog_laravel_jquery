@@ -9,15 +9,19 @@
     <link rel="shortcut icon" href="favicon.ico">
 
     <script defer src="{{url("assets/fontawesome/all.min.js")}}"></script>
-
     <link id="theme-style" rel="stylesheet" href="{{url("assets/css/theme-1.css")}}">
-
+    <style>
+        .error{
+            color: red;
+            font-style: italic;
+        }
+    </style>
 </head>
 
 <body>
 
 <header class="header text-center">
-    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Niusha's Blog</a></h1>
+    <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="{{route('posts_list')}}">Daily Blog</a></h1>
 
     <nav class="navbar navbar-expand-lg navbar-dark" >
 

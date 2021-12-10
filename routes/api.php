@@ -20,8 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//view routes
-Route::get('login_page', [UserController::class, 'login_page']);
+
 
 // These routes doesnt need authentication
 Route::post('register', [UserController::class, 'register']) -> name('register');

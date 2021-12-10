@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\BlogController;
 
@@ -13,10 +14,9 @@ use \App\Http\Controllers\BlogController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+//view routes
+Route::get('/', [UserController::class, 'login_page']) -> name('main');
+Route::get('register', [UserController::class, 'register_page']) -> name('sign_up');
 
 Route::get('posts_list', [BlogController::class, 'postsList']) -> name('posts_list');
 Route::get('create_post', [BlogController::class, 'createPost']) -> name('create_post');

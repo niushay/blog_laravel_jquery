@@ -63,5 +63,10 @@ class UserController extends Controller
         return view('users.login');
     }
 
+    public function register_page()
+    {
+        return view('users.register');
+    }
+
 
 }
