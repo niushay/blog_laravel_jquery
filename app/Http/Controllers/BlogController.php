@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Exports\PostsExport;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\BlogService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BlogController extends Controller
 {
+    private  $blogService;
+
+    public function __construct(BlogService $blogService)
+    {
+        $this -> blogService = $blogService;
+    }
+
     public function getUserName()
     {
         $user = auth()->user();
@@ -24,8 +32,7 @@ class BlogController extends Controller
 
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->get();
-
+        $posts = $this -> blogService -> getAllPosts();
 
         return response() -> json([
             'status' => 1,
@@ -46,12 +53,7 @@ class BlogController extends Controller
         ]);
 
         //Create Post
-        Post::create([
-            'title' => $request -> title,
-            'post_content' => $request -> post_content ,
-            'time' => $request -> time,
-            'user_id' => $user_id
-        ]);
+        $this->blogService->createPost($request->all(), $user_id);
 
         //Send response
         return response() -> json([
@@ -65,7 +67,7 @@ class BlogController extends Controller
         if(Post::where([
             'id' => $id,
         ])->exists()){
-            $postData = Post::findOrFail($id);
+            $postData = $this->blogService->getPostById($id);
 
             return response() -> json([
                 'status' => 1,
@@ -87,26 +89,7 @@ class BlogController extends Controller
         $writer = $request -> writer;
         $date = $request -> date;
 
-        if($writer == null && $date != null){
-            $posts = Post::where('created_at', 'like', $date . '%')->get();
-        }
-        if($date == null && $writer != null) {
-            $user = User::where('name', 'like', '%' . $writer . '%')->first();
-            if($user) {
-                $user_id = $user -> id;
-                $posts = Post::where('user_id', $user_id)->get();
-            }
-        }
-        if($date !== null && $writer !== null){
-            $user = User::where('name', 'like', '%' . $writer . '%')->first();
-            if($user) {
-                $user_id = $user -> id;
-                $posts = Post::where(function ($query) use($user_id, $date) {
-                $query->where('user_id',  $user_id)
-                    ->where('created_at', 'like', $date . '%');
-                })->get();
-            }
-        }
+        $posts = $this->blogService->filterByWriterDate($writer, $date);
 
         if(sizeof($posts) == 0) {
             return response() -> json([

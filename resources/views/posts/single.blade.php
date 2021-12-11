@@ -15,7 +15,7 @@
                         <h6 class="text-center">QR Code</h6>
                     </div>
                     <div class="card-body text-center" >
-                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(70)->backgroundColor(209, 196, 233)->generate(route('single_post', $id)) !!}
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(70)->backgroundColor(250,250,250)->generate(route('single_post', $id)) !!}
                     </div>
                 </div>
             </div>
