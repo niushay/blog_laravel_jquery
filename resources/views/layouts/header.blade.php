@@ -51,7 +51,50 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('posts_list')}}"><svg class="svg-inline--fa fa-home fa-w-18 fa-fw me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="home" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path></svg>All posts <span class="sr-only"></span></a>
                 </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" id="excelExport"><svg class="svg-inline--fa fa-bookmark fa-w-12 fa-fw me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bookmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"></path></svg>Export My Posts</a>
+                </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<script src="{{url("assets/vendor/jquery/jquery.min.js")}}"></script>
+<script>
+    var token = localStorage.getItem('token');
+
+    $(function () {
+        //Get User Name to show in the Navbar
+        $.ajax({
+            method: 'GET',
+            url: "{{route('get_username')}}",
+            headers: {Authorization: "Bearer " + token},
+            success: function (response) {
+                $(".blog-name").empty()
+                $(".blog-name").append(response.user_name + "'s blog");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        })
+
+        //Export Excel button
+        $("#excelExport").click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                method: 'GET',
+                url: "{{route('get_username')}}",
+                headers: {Authorization: "Bearer " + token},
+                success: function (response) {
+                    $(".blog-name").empty()
+                    $(".blog-name").append(response.user_name + "'s blog");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+                }
+            });
+        })
+    })
+</script>
+

@@ -97,7 +97,7 @@
                     + '<div class="row g-3 g-xl-0">'
                     + '<div class="col">'
                     + '<h3 class="title mb-1"><a class="text-link" href="' + url + '/single_post/' + item.id +'">' + item.title + '</a></h3>'
-                    + '<div class="meta mb-1"><span class="date">Published at ' + item.date + '</span><span class="time">' + item.time + ' min read</span></div>'
+                    + '<div class="meta mb-1"><span class="date">Published at ' + item.date + '</span><span class="time">' + item.time + ' min read</span><span class="date">Posted by </span></div>'
                     + '<div class="intro">' + paragraph + '</div>'
                     + '<a class="text-link" href="' + url + '/single_post/' + item.id +'">Read more →</a>'
                     + '</div>'
@@ -115,12 +115,12 @@
 
                 $("#container").append(
                     '<div class="item mb-5">'
-                    + '<div class="row g-3 g-xl-0">'
-                    + '<div class="col">'
-                    +'<h5>'+ message +'</h5>'
-                    +'</div>'
-                    +'</div>'
-                    +'</div>'
+                        + '<div class="row g-3 g-xl-0">'
+                            + '<div class="col">'
+                                +'<h5>'+ message +'</h5>'
+                            +'</div>'
+                        + '</div>'
+                        +'</div>'
                     +'</div>'
                 )
             }

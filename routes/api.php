@@ -28,9 +28,12 @@ Route::post('login', [UserController::class, 'login'])-> name('login');
 
 // These routes need Authentication
 Route::middleware('auth:api') ->group(function () {
+    Route::get('getUserName', [BlogController::class, 'getUserName'])->name("get_username");
     Route::get('index', [BlogController::class, 'index'])->name("index");
     Route::post('create', [BlogController::class, 'create'])->name("create");
+    Route::get('single/{id}', [BlogController::class, 'singlePost'])->name("single");
     Route::get('filter', [BlogController::class, 'filter'])->name("filter");
+    Route::get('excelExport', [BlogController::class, 'excelExport'])->name("excel_export");
 
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('logout', [UserController::class, 'logout']);

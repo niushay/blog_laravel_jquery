@@ -4,11 +4,19 @@
         <article class="blog-post px-3 py-5 p-md-5">
             <div class="container single-col-max-width">
                 <header class="blog-post-header">
-                    <h2 class="title mb-2"></h2>
+                    <h3 class="title mb-2"></h3>
                     <div class="meta mb-3"><span class="date">Published at </span><span class="time"></span></div>
                 </header>
                 <div class="blog-post-body">
                     <p></p>
+                </div>
+                <div class="card col-3 mt-5">
+                    <div class="card-header">
+                        <h6 class="text-center">QR Code</h6>
+                    </div>
+                    <div class="card-body text-center" >
+                        {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(70)->backgroundColor(209, 196, 233)->generate(route('single_post', $id)) !!}
+                    </div>
                 </div>
             </div>
         </article>

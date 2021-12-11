@@ -2,20 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PostsExport;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BlogController extends Controller
 {
+    public function getUserName()
+    {
+        $user = auth()->user();
+        $user_name = $user->name;
+
+        return response() -> json([
+            'status' => 1,
+            'message' => 'Username',
+            'user_name' => $user_name
+        ]);
+    }
+
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->get();
 
+
         return response() -> json([
             'status' => 1,
             'message' => 'All posts',
-            'data' => $posts
+            'data' => $posts,
         ]);
     }
 
@@ -55,7 +70,8 @@ class BlogController extends Controller
             return response() -> json([
                 'status' => 1,
                 'message' => 'Single post details',
-                'data' => $postData
+                'data' => $postData,
+                'post_id' => $id
             ]);
         }
 
@@ -104,6 +120,12 @@ class BlogController extends Controller
             'message' => 'All filtered Posts',
             'data' => $posts
         ]);
+    }
+
+    public function excelExport()
+    {
+        $user_id = auth() -> user() -> id;
+        Excel::download(new PostsExport, 'posts.xlsx');
     }
 
     public function postsList()
