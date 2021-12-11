@@ -33,6 +33,7 @@ Route::middleware('auth:api') ->group(function () {
     Route::post('create', [BlogController::class, 'create'])->name("create");
     Route::get('single/{id}', [BlogController::class, 'singlePost'])->name("single");
     Route::get('filter', [BlogController::class, 'filter'])->name("filter");
+
     Route::get('excelExport', [BlogController::class, 'excelExport'])->name("excel_export");
 
     Route::get('profile', [UserController::class, 'profile']);

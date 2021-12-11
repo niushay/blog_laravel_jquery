@@ -124,8 +124,7 @@ class BlogController extends Controller
 
     public function excelExport()
     {
-        $user_id = auth() -> user() -> id;
-        Excel::download(new PostsExport, 'posts.xlsx');
+        return Excel::download(new PostsExport, 'posts.xlsx');
     }
 
     public function postsList()

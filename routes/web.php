@@ -23,3 +23,5 @@ Route::get('posts_list', [BlogController::class, 'postsList']) -> name('posts_li
 Route::get('create_post', [BlogController::class, 'createPost']) -> name('create_post');
 Route::get('single_post/{id}', [BlogController::class, 'singlePostView']) -> name('single_post');
 
+
+
