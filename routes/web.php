@@ -14,10 +14,12 @@ use \App\Http\Controllers\BlogController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-//view routes
+//view routes for Users
 Route::get('/', [UserController::class, 'login_page']) -> name('main');
 Route::get('register', [UserController::class, 'register_page']) -> name('sign_up');
 
+//view routes for Posts
 Route::get('posts_list', [BlogController::class, 'postsList']) -> name('posts_list');
 Route::get('create_post', [BlogController::class, 'createPost']) -> name('create_post');
+Route::get('single_post/{id}', [BlogController::class, 'singlePostView']) -> name('single_post');
 

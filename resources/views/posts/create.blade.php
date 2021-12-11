@@ -1,7 +1,7 @@
 @include("layouts.header")
 <div class="main-wrapper">
     <section class="blog-list px-3 py-8 p-md-5">
-    <div class="container single-col-max-width">
+        <div class="container single-col-max-width">
         <h5 style="margin-bottom: 5%">Create New Post</h5>
 
         <form action="{{route('create')}}" method="POST" enctype="multipart/form-data" id="create_post"  class="login-form" >
@@ -27,7 +27,7 @@
         </form>
 
     </div>
-</section>
+    </section>
 </div>
 
 <script src="{{url("assets/vendor/jquery/jquery.min.js")}}"></script>
@@ -43,9 +43,9 @@
         if($registrationForm.length){
             $registrationForm.validate({
                 rules:{
-                    title: {required: true, noSpace: true},
+                    title: {required: true, noSpace: true, minlength:2},
                     post_content: {required: true, minlength : 10},
-                    time: {required: true, minlength : 4},
+                    time: {required: true},
                 },
                 messages:{
                     title: {required: 'Title is required!'},
@@ -66,6 +66,7 @@
                 data: $('form').serializeArray(),
                 success: function () {
                     alert('New Post has been created');
+                    window.location.href = "{{route('posts_list')}}"
                 }
             });
         });

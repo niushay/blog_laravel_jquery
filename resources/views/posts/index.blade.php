@@ -22,28 +22,110 @@
         </div>
     </section>
 
-            <section class="blog-list px-3 py-5 p-md-5">
+    <section class="blog-list px-3 py-5 p-md-5">
+        <div class="container single-col-max-width"  id="container">
+        </div>
 
-                <div class="container single-col-max-width">
-                    <div class="item mb-5">
-                        <div class="row g-3 g-xl-0">
-                            <div class="col">
-                                <h3 class="title mb-1"><a class="text-link" href="blog-post.html">Top 3 JavaScript Frameworks</a></h3>
-                                <div class="meta mb-1"><span class="date">Published 2 days ago</span><span class="time">5 min read</span><span class="comment"><a class="text-link" href="#">8 comments</a></span></div>
-                                <div class="intro">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</div>
-                                <a class="text-link" href="blog-post.html">Read more &rarr;</a>
-                            </div>
-                        </div>
-                    </div>
+        <div  class="container single-col-max-width">
+            <nav class="blog-nav nav nav-justified my-5">
+                <a class="nav-link-prev nav-item nav-link d-none rounded-left" href="#">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+                <a class="nav-link-next nav-item nav-link rounded" href="#">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+            </nav>
+        </div>
+    </section>
 
-                    <nav class="blog-nav nav nav-justified my-5">
-                        <a class="nav-link-prev nav-item nav-link d-none rounded-left" href="#">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-                        <a class="nav-link-next nav-item nav-link rounded" href="#">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
-                    </nav>
-
-                </div>
-            </section>
 </div>
 
 @include("layouts.footer")
+
+<script src="{{url("assets/vendor/jquery/jquery.min.js")}}"></script>
+<script>
+    $(function (){
+        var token = localStorage.getItem('token');
+
+        //Get all data
+        $.ajax({
+            method:'GET',
+            url: "{{route('index')}}",
+            headers:{Authorization: "Bearer " + token},
+            success: function (response) {
+                data = response.data
+                appendDataToContainer(data, 'all');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+            }
+        })
+
+        $("form").submit( function (e) {
+            var writer = $('#writer').val()
+            var date = $('#date').val()
+
+            e.preventDefault();
+            filter(writer, date);
+            return false;
+        });
+
+        function filter(writer, date){
+            $.ajax({
+                method: 'GET',
+                url: "{{route('filter')}}",
+                data: {writer: writer, date: date},
+                headers: {Authorization: "Bearer " + token},
+                success: function (response) {
+                    var data = response.data;
+                    $("#container").empty()
+                    appendDataToContainer(data, 'filter');
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+                }
+            })
+        }
+
+        function appendDataToContainer(data, type){
+            if (data){
+            data.forEach(function(item) {
+                var dateObject = new Date(item.created_at);
+                var date = dateObject.getDate() + "/" + (dateObject.getMonth()+1) + "/" +dateObject.getFullYear();
+
+                var paragraph = (item.post_content).slice(0, 250)
+                var url = window.location.origin;
+
+                $("#container").append(
+                    '<div class="item mb-5">'
+                    + '<div class="row g-3 g-xl-0">'
+                    + '<div class="col">'
+                    + '<h3 class="title mb-1"><a class="text-link" href="' + url + '/single_post/' + item.id +'">' + item.title + '</a></h3>'
+                    + '<div class="meta mb-1"><span class="date">Published at ' + item.date + '</span><span class="time">' + item.time + ' min read</span></div>'
+                    + '<div class="intro">' + paragraph + '</div>'
+                    + '<a class="text-link" href="' + url + '/single_post/' + item.id +'">Read more →</a>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+                )
+            })
+            }else {
+                let message = '';
+                if(type === 'filter'){
+                    message = 'Post not Found!'
+                }else {
+                    message = 'There is no post yet!'
+                }
+
+                $("#container").append(
+                    '<div class="item mb-5">'
+                    + '<div class="row g-3 g-xl-0">'
+                    + '<div class="col">'
+                    +'<h5>'+ message +'</h5>'
+                    +'</div>'
+                    +'</div>'
+                    +'</div>'
+                    +'</div>'
+                )
+            }
+        }
+
+    })
+</script>
 

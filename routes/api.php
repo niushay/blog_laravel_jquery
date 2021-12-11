@@ -30,6 +30,7 @@ Route::post('login', [UserController::class, 'login'])-> name('login');
 Route::middleware('auth:api') ->group(function () {
     Route::get('index', [BlogController::class, 'index'])->name("index");
     Route::post('create', [BlogController::class, 'create'])->name("create");
+    Route::get('filter', [BlogController::class, 'filter'])->name("filter");
 
     Route::get('profile', [UserController::class, 'profile']);
     Route::post('logout', [UserController::class, 'logout']);
