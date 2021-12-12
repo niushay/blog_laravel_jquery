@@ -34,7 +34,16 @@ class BlogService
 
     public function getPostById($id)
     {
-        return Post::findOrFail($id);
+        $post = DB::table('posts')
+            ->join('users', function ($join) use ($id){
+                $join->on('posts.user_id', '=', 'users.id')
+                    ->where('posts.id', $id);
+            })
+            ->select('posts.*', 'users.name')
+            ->orderBy('posts.created_at')
+            ->first();
+
+        return $post;
     }
 
     public function filterByWriterDate($writer, $date)
