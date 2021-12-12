@@ -65,6 +65,9 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" id="excelExport"><svg class="svg-inline--fa fa-bookmark fa-w-12 fa-fw me-2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bookmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M0 512V48C0 21.49 21.49 0 48 0h288c26.51 0 48 21.49 48 48v464L192 400 0 512z"></path></svg>Export My Posts</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -112,6 +115,15 @@
                 }
             });
         })
+
+        //logout
+        $("#logout").click(function (e) {
+            e.preventDefault();
+            //remove token and redirect to login page
+            localStorage.removeItem("token");
+            window.location.href = "{{route('main')}}"
+        })
+
     })
 </script>
 

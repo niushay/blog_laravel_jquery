@@ -24,9 +24,9 @@ class BlogService
     public function createPost($data, $user_id)
     {
         Post::create([
-            'title' => $data -> title,
-            'post_content' => $data -> post_content ,
-            'time' => $data -> time,
+            'title' => $data['title'],
+            'post_content' => $data['post_content'] ,
+            'time' => $data['time'],
             'user_id' => $user_id
         ]);
         return true;
