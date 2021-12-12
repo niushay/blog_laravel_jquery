@@ -6,12 +6,19 @@ namespace App\Services;
 
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class BlogService
 {
     public function getAllPosts()
     {
-        return Post::orderBy('created_at', 'desc')->get();
+        $posts = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.id')
+            ->select('posts.*', 'users.name')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $posts;
     }
 
     public function createPost($data, $user_id)
@@ -33,27 +40,45 @@ class BlogService
     public function filterByWriterDate($writer, $date)
     {
         if($writer == null && $date != null){
-            $posts = Post::where('created_at', 'like', $date . '%')->get();
+            $posts = DB::table('posts')
+                ->join('users', function ($join) use ($date){
+                    $join->on('posts.user_id', '=', 'users.id')
+                        ->where('posts.created_at', 'like', $date . '%');
+                })
+                ->select('posts.*', 'users.name')
+                ->orderBy('posts.created_at')
+                ->get();
         }
         if($date == null && $writer != null) {
             $user = User::where('name', 'like', '%' . $writer . '%')->first();
             if($user) {
                 $user_id = $user -> id;
-                $posts = Post::where('user_id', $user_id)->get();
+                $posts = DB::table('posts')
+                    ->join('users', function ($join) use ($user_id){
+                        $join->on('posts.user_id', '=', 'users.id')
+                            ->where('posts.user_id', $user_id);
+                    })
+                    ->select('posts.*', 'users.name')
+                    ->orderBy('posts.created_at')
+                    ->get();
             }
         }
         if($date !== null && $writer !== null){
             $user = User::where('name', 'like', '%' . $writer . '%')->first();
             if($user) {
                 $user_id = $user -> id;
-                $posts = Post::where(function ($query) use($user_id, $date) {
-                    $query->where('user_id',  $user_id)
-                        ->where('created_at', 'like', $date . '%');
-                })->get();
+
+                $posts = DB::table('posts')
+                    ->join('users', function ($join) use ($user_id, $date){
+                        $join->on('posts.user_id', '=', 'users.id')
+                            ->where('posts.user_id', $user_id)
+                            ->where('posts.created_at', 'like', $date . '%');
+                    })
+                    ->select('posts.*', 'users.name')
+                    ->orderBy('posts.created_at')
+                    ->get();
             }
         }
         return $posts;
     }
-
-
 }
